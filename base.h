@@ -25,7 +25,11 @@ typedef struct keynode {
 } KeyNode;
 
 typedef struct keyvaluenode {
-	KeyNode* keynode;
+	struct keyvaluenode* l;
+	struct keyvaluenode* r;
+	struct keyvaluenode* p;
+	size_t height;
+	void* key;
 	void* value;
 } KeyValueNode;
 
@@ -36,18 +40,19 @@ typedef struct {
 } TreeSet;
 
 typedef struct {
-	TreeSet* treeset;
+	size_t size;
+	int (*compare)(const void* a, const void* b);
 	KeyValueNode* root;
 } TreeMap;
 
-KeyNode* get_subtree_min(KeyNode* node);
-KeyNode* get_subtree_max(KeyNode* node);
-KeyNode* insert_node(TreeSet* tree, KeyNode* root, KeyNode* node);
-KeyNode* find_node(TreeSet* tree, void* key);
-void delete_node(TreeSet* tree, KeyNode* node);
-void walk_keys(TreeSet* tree, KeyNode* node, TreeWalkOrder order, void** keys, size_t* count);
-KeyNode* next(TreeSet* tree, KeyNode* node);
-KeyNode* prev(TreeSet* tree, KeyNode* node);
+KeyValueNode* get_subtree_min(KeyValueNode* node);
+KeyValueNode* get_subtree_max(KeyValueNode* node);
+KeyValueNode* insert_node(TreeMap* tree, KeyValueNode* root, KeyValueNode* node);
+KeyValueNode* find_node(TreeMap* tree, void* key);
+void delete_node(TreeMap* tree, KeyValueNode* node);
+void walk_keys(TreeMap* tree, KeyValueNode* node, TreeWalkOrder order, void** keys, size_t* count);
+KeyValueNode* next(TreeMap* tree, KeyValueNode* node);
+KeyValueNode* prev(TreeMap* tree, KeyValueNode* node);
 
 KeyNode* KeyNode_init(void* key);
 KeyValueNode* KeyValueNode_init(void* key, void* value);

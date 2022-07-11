@@ -7,56 +7,61 @@
 
 TreeMap* TreeMap_init(int (*comparer)(const void* a, const void* b)) {
 	TreeMap* tree = malloc(sizeof(TreeMap));
-	tree->treeset = TreeSet_init(comparer);
+	tree->size = 0;
+	tree->compare = comparer;
 	tree->root = NULL;
 	return tree;
 }
 
 KeyValueNode* KeyValueNode_init(void* key, void* value) {
 	KeyValueNode* node = malloc(sizeof(KeyValueNode));
-	node->keynode = KeyNode_init(key);
+	node->l = NULL;
+	node->r = NULL;
+	node->p = NULL;
+	node->height = 1;
+	node->key = key;
 	node->value = value;
 	return node;
 }
 
 void TreeMap_insert(TreeMap* tree, KeyValueNode* node) {
-	insert_node((TreeSet*)tree, (KeyNode*)tree->root, (KeyNode*)node);
-	tree->root->keynode->p = NULL;
+	tree->root = insert_node(tree, tree->root, node);
+	tree->root->p = NULL;
 }
 
 void TreeMap_delete(TreeMap* tree, KeyValueNode* node) {
-	delete_node((TreeSet*)tree, (KeyNode*)node);
+	delete_node(tree, node);
 }
 
 KeyValueNode* TreeMap_find(TreeMap* tree, void* key) {
-	return (KeyValueNode*)find_node((TreeSet*)tree, key);
+	return find_node(tree, key);
 }
 
 void** TreeMap_get_keys(TreeMap* tree, TreeWalkOrder order) {
-	void** keys = malloc(sizeof(void*) * tree->treeset->size);
+	void** keys = malloc(sizeof(void*) * tree->size);
 	size_t count = 0;
-	walk_keys((TreeSet*)tree, (KeyNode*)tree->root, order, keys, &count);
+	walk_keys(tree, tree->root, order, keys, &count);
 	return keys;
 }
 
 bool TreeMap_contains(TreeMap* tree, void* key) {
-	return TreeSet_find(tree->treeset, key) != NULL;
+	return TreeMap_find(tree, key) != NULL;
 }
 
 KeyValueNode* TreeMap_min(TreeMap* tree) {
-	if (tree->treeset->root == NULL) return NULL;
-	return (KeyValueNode*)get_subtree_min(tree->treeset->root);
+	if (tree->root == NULL) return NULL;
+	return get_subtree_min(tree->root);
 }
 
 KeyValueNode* TreeMap_max(TreeMap* tree) {
-	if (tree->treeset->root == NULL) return NULL;
-	return (KeyValueNode*)get_subtree_max(tree->treeset->root);
+	if (tree->root == NULL) return NULL;
+	return get_subtree_max(tree->root);
 }
 
 KeyValueNode* TreeMap_next(TreeMap* tree, KeyValueNode* node) {
-	return (KeyValueNode*)next(tree->treeset, (KeyNode*)node);
+	return next(tree, node);
 }
 
 KeyValueNode* TreeMap_prev(TreeMap* tree, KeyValueNode* node) {
-	return (KeyValueNode*)prev(tree->treeset, (KeyNode*)node);
+	return prev(tree, node);
 }

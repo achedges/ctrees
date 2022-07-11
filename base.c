@@ -6,28 +6,28 @@
 #include <stdlib.h>
 #include "base.h"
 
-size_t get_max_subtree_height(KeyNode* node) {
+size_t get_max_subtree_height(KeyValueNode* node) {
 	size_t lh = 0, rh = 0;
 	if (node->l != NULL) lh = node->l->height;
 	if (node->r != NULL) rh = node->r->height;
 	return lh > rh ? lh : rh;
 }
 
-KeyNode* get_subtree_min(KeyNode* node) {
-	KeyNode* n = node;
+KeyValueNode* get_subtree_min(KeyValueNode* node) {
+	KeyValueNode* n = node;
 	while (n->l != NULL) n = n->l;
 	return n;
 }
 
-KeyNode* get_subtree_max(KeyNode* node) {
-	KeyNode* n = node;
+KeyValueNode* get_subtree_max(KeyValueNode* node) {
+	KeyValueNode* n = node;
 	while (n->r != NULL) n = n->r;
 	return n;
 }
 
-KeyNode* rotate_left(KeyNode* node) {
-	KeyNode* newroot = node->r;
-	KeyNode* tmp = newroot->l;
+KeyValueNode* rotate_left(KeyValueNode* node) {
+	KeyValueNode* newroot = node->r;
+	KeyValueNode* tmp = newroot->l;
 	newroot->l = node;
 	node->r = tmp;
 
@@ -39,9 +39,9 @@ KeyNode* rotate_left(KeyNode* node) {
 	return newroot;
 }
 
-KeyNode* rotate_right(KeyNode* node) {
-	KeyNode* newroot = node->l;
-	KeyNode* tmp = newroot->r;
+KeyValueNode* rotate_right(KeyValueNode* node) {
+	KeyValueNode* newroot = node->l;
+	KeyValueNode* tmp = newroot->r;
 	newroot->r = node;
 	node->l = tmp;
 
@@ -53,7 +53,7 @@ KeyNode* rotate_right(KeyNode* node) {
 	return newroot;
 }
 
-KeyNode* replace_node(KeyNode* old, KeyNode* new) {
+KeyValueNode* replace_node(KeyValueNode* old, KeyValueNode* new) {
 	new->l = old->l;
 	new->r = old->r;
 	new->p = old->p;
@@ -62,7 +62,7 @@ KeyNode* replace_node(KeyNode* old, KeyNode* new) {
 	return new;
 }
 
-KeyNode* insert_node(TreeSet* tree, KeyNode* root, KeyNode* node) {
+KeyValueNode* insert_node(TreeMap* tree, KeyValueNode* root, KeyValueNode* node) {
 	if (root == NULL) {
 		root = node;
 		tree->size += 1;
@@ -106,7 +106,7 @@ KeyNode* insert_node(TreeSet* tree, KeyNode* root, KeyNode* node) {
 	return root;
 }
 
-void transplant_node(TreeSet* tree, KeyNode* old, KeyNode* new) {
+void transplant_node(TreeMap* tree, KeyValueNode* old, KeyValueNode* new) {
 	if (old->p == NULL) {
 		tree->root = new;
 	} else if (old->p->l != NULL && tree->compare(old->key, old->p->l->key) == 0) {
@@ -119,7 +119,7 @@ void transplant_node(TreeSet* tree, KeyNode* old, KeyNode* new) {
 		new->p = old->p;
 }
 
-void delete_node(TreeSet* tree, KeyNode* node) {
+void delete_node(TreeMap* tree, KeyValueNode* node) {
 	if (node == NULL) return;
 
 	if (node->l == NULL) {
@@ -127,7 +127,7 @@ void delete_node(TreeSet* tree, KeyNode* node) {
 	} else if (node->r == NULL) {
 		transplant_node(tree, node, node->l);
 	} else {
-		KeyNode* y = get_subtree_min(node->r);
+		KeyValueNode* y = get_subtree_min(node->r);
 		if (tree->compare(y->p->key, node->key) != 0) {
 			transplant_node(tree, y, y->r);
 			y->r = node->r;
@@ -141,8 +141,8 @@ void delete_node(TreeSet* tree, KeyNode* node) {
 	tree->size -= 1;
 }
 
-KeyNode* find_node(TreeSet* tree, void* key) {
-	KeyNode* node = tree->root;
+KeyValueNode* find_node(TreeMap* tree, void* key) {
+	KeyValueNode* node = tree->root;
 	while (node != NULL) {
 		int keycomp = tree->compare(key, node->key);
 		if (keycomp == 0) {
@@ -173,7 +173,7 @@ BfsItems* bfs_items_init(size_t depth) {
 	return items;
 }
 
-void bfs(KeyNode* node, BfsItems** depthmap, size_t depth) {
+void bfs(KeyValueNode* node, BfsItems** depthmap, size_t depth) {
 	if (depthmap[depth] == NULL)
 		depthmap[depth] = bfs_items_init(depth);
 	depthmap[depth]->keys[depthmap[depth]->count++] = node->key;
@@ -183,7 +183,7 @@ void bfs(KeyNode* node, BfsItems** depthmap, size_t depth) {
 		bfs(node->r, depthmap, depth + 1);
 }
 
-void walk_keys(TreeSet* tree, KeyNode* node, TreeWalkOrder order, void** keys, size_t* count) {
+void walk_keys(TreeMap* tree, KeyValueNode* node, TreeWalkOrder order, void** keys, size_t* count) {
 	size_t bfsdepth = 1;
 	size_t bfscount = 0;
 	BfsItems** depthmap;
@@ -223,11 +223,11 @@ void walk_keys(TreeSet* tree, KeyNode* node, TreeWalkOrder order, void** keys, s
 	}
 }
 
-KeyNode* next(TreeSet* tree, KeyNode* node) {
+KeyValueNode* next(TreeMap* tree, KeyValueNode* node) {
 	if (node->r != NULL)
 		return get_subtree_min(node->r);
 
-	KeyNode* parent = node->p;
+	KeyValueNode* parent = node->p;
 	while (parent != NULL && parent->r != NULL && tree->compare(node->key, parent->r->key) == 0) {
 		node = parent;
 		parent = parent->p;
@@ -236,11 +236,11 @@ KeyNode* next(TreeSet* tree, KeyNode* node) {
 	return parent;
 }
 
-KeyNode* prev(TreeSet* tree, KeyNode* node) {
+KeyValueNode* prev(TreeMap* tree, KeyValueNode* node) {
 	if (node->l != NULL)
 		return get_subtree_max(node->l);
 
-	KeyNode* parent = node->p;
+	KeyValueNode* parent = node->p;
 	while (parent != NULL && parent->l != NULL && tree->compare(node->key, parent->l->key) == 0) {
 		node = parent;
 		parent = parent->p;

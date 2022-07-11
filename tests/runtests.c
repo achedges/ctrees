@@ -5,12 +5,11 @@
 #include <stdio.h>
 #include "context.h"
 
-int main(int argc, char** args) {
+int main() {
 
 	int results = 0;
 
 	// Primitive tests
-
 	results += test_tree_size();
 	results += test_tree_min_max();
 	results += test_tree_next_prev_nodes();

@@ -10,26 +10,26 @@ int test_treemap_keyvalue_pairs() {
 
 	TreeMap* map = TreeMap_init(&int_comparer);
 	for (int i = 0; i < mapsize; i++) {
-		KeyValueNode* node = KeyValueNode_init((void*)&MAP_KEYS[i], (void*)&MAP_VALUES[i]);
+		KeyValueNode* node = KeyValueNode_init((void*)&MAP_KEYS[i], (void*)MAP_VALUES[i]);
 		TreeMap_insert(map, node);
 	}
 
-	if (map->treeset->size != mapsize) {
-		printf("Incorrect map size: %zu\n", map->treeset->size);
+	if (map->size != mapsize) {
+		printf("Incorrect map size: %zu\n", map->size);
 		results += 1;
 	}
 
 	for (int i = 0; i < mapsize; i++) {
 		KeyValueNode* node = TreeMap_find(map, (void*)&MAP_KEYS[i]);
-		if (string_comparer(node->value, (void*)&MAP_VALUES[i]) != 0) {
-			printf("Incorrect value at node %d\n", *(int*)node->keynode->key);
+		if (string_comparer(node->value, (void*)MAP_VALUES[i]) != 0) {
+			printf("Incorrect value at node %d\n", *(int*)node->key);
 			results += 1;
 		}
 	}
 
 	KeyValueNode* node = TreeMap_min(map);
-	if (*(int*)node->keynode->key != 1) {
-		printf("Unexpected tree map min: %d\n", *(int*)node->keynode->key);
+	if (*(int*)node->key != 1) {
+		printf("Unexpected tree map min: %d\n", *(int*)node->key);
 		results += 1;
 	}
 
@@ -39,8 +39,8 @@ int test_treemap_keyvalue_pairs() {
 	}
 
 	node = TreeMap_max(map);
-	if (*(int*)node->keynode->key != 4) {
-		printf("Unexpected tree map max: %d\n", *(int*)node->keynode->key);
+	if (*(int*)node->key != 4) {
+		printf("Unexpected tree map max: %d\n", *(int*)node->key);
 		results += 1;
 	}
 

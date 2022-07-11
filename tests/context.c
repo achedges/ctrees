@@ -4,7 +4,6 @@
 
 #include <stdio.h>
 #include "context.h"
-#include "../keycomp.h"
 
 const int LIST_SIZE = 10;
 const int TEST_KEYS[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };

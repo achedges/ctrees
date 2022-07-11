@@ -24,22 +24,22 @@ KeyNode* KeyNode_init(void* key) {
 }
 
 void TreeSet_insert(TreeSet* tree, KeyNode* node) {
-	tree->root = insert_node(tree, tree->root, node);
+	tree->root = (KeyNode*)insert_node((TreeMap*)tree, (KeyValueNode*)tree->root, (KeyValueNode*)node);
 	tree->root->p = NULL;
 }
 
 void TreeSet_delete(TreeSet* tree, KeyNode* node) {
-	delete_node(tree, node);
+	delete_node((TreeMap*)tree, (KeyValueNode*)node);
 }
 
 KeyNode* TreeSet_find(TreeSet* tree, void* key) {
-	return find_node(tree, key);
+	return (KeyNode*)find_node((TreeMap*)tree, key);
 }
 
 void** TreeSet_get_keys(TreeSet* tree, TreeWalkOrder order) {
 	void** keys = malloc(sizeof(void*) * tree->size);
 	size_t count = 0;
-	walk_keys(tree, tree->root, order, keys, &count);
+	walk_keys((TreeMap*)tree, (KeyValueNode*)tree->root, order, keys, &count);
 	return keys;
 }
 
@@ -49,18 +49,18 @@ bool TreeSet_contains(TreeSet* tree, void* key) {
 
 KeyNode* TreeSet_min(TreeSet* tree) {
 	if (tree->root == NULL) return NULL;
-	return get_subtree_min(tree->root);
+	return (KeyNode*)get_subtree_min((KeyValueNode*)tree->root);
 }
 
 KeyNode* TreeSet_max(TreeSet* tree) {
 	if (tree->root == NULL) return NULL;
-	return get_subtree_max(tree->root);
+	return (KeyNode*)get_subtree_max((KeyValueNode*)tree->root);
 }
 
 KeyNode* TreeSet_next(TreeSet* tree, KeyNode* node) {
-	return next(tree, node);
+	return (KeyNode*)next((TreeMap*)tree, (KeyValueNode*)node);
 }
 
 KeyNode* TreeSet_prev(TreeSet* tree, KeyNode* node) {
-	return prev(tree, node);
+	return (KeyNode*)prev((TreeMap*)tree, (KeyValueNode*)node);
 }

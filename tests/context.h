@@ -7,8 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "../base.h"
-#include "../keycomp.h"
+#include "../trees.h"
 
 const extern int LIST_SIZE;
 const extern int TEST_KEYS[];

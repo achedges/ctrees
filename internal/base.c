@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "base.h"
+#include "../trees.h"
 
 size_t get_max_subtree_height(KeyValueNode* node) {
 	size_t lh = 0, rh = 0;
@@ -205,7 +205,7 @@ void walk_keys(TreeMap* tree, KeyValueNode* node, TreeWalkOrder order, void** ke
 			keys[(*count)++] = node->key;
 			break;
 		case BreadthFirst:
-			while ((1 << bfsdepth) < tree->size) bfsdepth += 1;
+			while ((1 << bfsdepth) <= tree->size) bfsdepth += 1;
 
 			depthmap = malloc(sizeof(BfsItems*) * bfsdepth);
 			for (int d = 0; d < bfsdepth; d++) depthmap[d] = NULL;

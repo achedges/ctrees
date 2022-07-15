@@ -6,6 +6,7 @@
 #define CTREES_KEYCOMP_H
 
 int int_comparer(const void* a, const void* b);
+int long_comparer(const void* a, const void* b);
 int string_comparer(const void* a, const void* b);
 
 #endif //CTREES_KEYCOMP_H

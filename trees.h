@@ -1,13 +1,14 @@
 //
-// Created by Adam Hedges on 7/6/22.
+// Created by Adam Hedges on 7/11/22.
 //
 
-#ifndef CTREES_BASE_H
-#define CTREES_BASE_H
+#ifndef CTREES_TREES_H
+#define CTREES_TREES_H
 
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include "keycomp.h"
 
 typedef enum {
 	InOrder,
@@ -45,15 +46,6 @@ typedef struct {
 	KeyValueNode* root;
 } TreeMap;
 
-KeyValueNode* get_subtree_min(KeyValueNode* node);
-KeyValueNode* get_subtree_max(KeyValueNode* node);
-KeyValueNode* insert_node(TreeMap* tree, KeyValueNode* root, KeyValueNode* node);
-KeyValueNode* find_node(TreeMap* tree, void* key);
-void delete_node(TreeMap* tree, KeyValueNode* node);
-void walk_keys(TreeMap* tree, KeyValueNode* node, TreeWalkOrder order, void** keys, size_t* count);
-KeyValueNode* next(TreeMap* tree, KeyValueNode* node);
-KeyValueNode* prev(TreeMap* tree, KeyValueNode* node);
-
 KeyNode* KeyNode_init(void* key);
 KeyValueNode* KeyValueNode_init(void* key, void* value);
 
@@ -79,4 +71,4 @@ KeyValueNode* TreeMap_max(TreeMap* tree);
 KeyValueNode* TreeMap_next(TreeMap* tree, KeyValueNode* node);
 KeyValueNode* TreeMap_prev(TreeMap* tree, KeyValueNode* node);
 
-#endif //CTREES_BASE_H
+#endif //CTREES_TREES_H

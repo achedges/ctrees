@@ -3,7 +3,16 @@
 //
 
 #include <stdbool.h>
-#include "base.h"
+#include "trees.h"
+
+extern KeyValueNode* insert_node(TreeMap* tree, KeyValueNode* root, KeyValueNode* node);
+extern void delete_node(TreeMap* tree, KeyValueNode* node);
+extern KeyValueNode* find_node(TreeMap* tree, void* key);
+extern void walk_keys(TreeMap* tree, KeyValueNode* root, TreeWalkOrder order, void** keys, size_t* count);
+extern KeyValueNode* get_subtree_min(KeyValueNode* root);
+extern KeyValueNode* get_subtree_max(KeyValueNode* root);
+extern KeyValueNode* next(TreeMap* tree, KeyValueNode* node);
+extern KeyValueNode* prev(TreeMap* tree, KeyValueNode* node);
 
 TreeSet* TreeSet_init(int (*key_comparer)(const void* a, const void* b)) {
 	TreeSet* tree = malloc(sizeof(TreeSet));

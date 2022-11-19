@@ -27,6 +27,9 @@ KeyValueNode* get_subtree_max(KeyValueNode* node) {
 
 KeyValueNode* rotate_left(KeyValueNode* node) {
 	KeyValueNode* newroot = node->r;
+	if (newroot == NULL) {
+		return node;
+	}
 	KeyValueNode* tmp = newroot->l;
 	newroot->l = node;
 	node->r = tmp;
@@ -41,6 +44,9 @@ KeyValueNode* rotate_left(KeyValueNode* node) {
 
 KeyValueNode* rotate_right(KeyValueNode* node) {
 	KeyValueNode* newroot = node->l;
+	if (newroot == NULL) {
+		return node;
+	}
 	KeyValueNode* tmp = newroot->r;
 	newroot->r = node;
 	node->l = tmp;

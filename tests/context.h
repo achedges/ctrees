@@ -36,6 +36,7 @@ int test_tree_delete_root_node();
 int test_tree_delete_all_nodes();
 
 // TreeSet tests
+int test_treeset_symbols_build();
 int test_treeset_lookup();
 
 // TreeMap tests

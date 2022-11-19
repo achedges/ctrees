@@ -24,6 +24,7 @@ int main() {
 	results += test_tree_delete_all_nodes();
 
 	// TreeSet tests
+	results += test_treeset_symbols_build();
 	results += test_treeset_lookup();
 
 	// TreeMap tests

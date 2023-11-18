@@ -2,9 +2,23 @@
 // Created by Adam Hedges on 7/6/22.
 //
 
-#include <stdio.h>
 #include <stdlib.h>
 #include "../trees.h"
+
+size_t get_tree_depth(KeyValueNode* node, size_t current_max) {
+    size_t left_max = current_max;
+    size_t right_max = current_max;
+
+    if (node->l != NULL) {
+        left_max = get_tree_depth(node->l, current_max + 1);
+    }
+    if (node->r != NULL) {
+        right_max = get_tree_depth(node->r, current_max + 1);
+    }
+
+    size_t child_max = left_max > right_max ? left_max : right_max;
+    return child_max > current_max ? child_max : current_max;
+}
 
 size_t get_max_subtree_height(KeyValueNode* node) {
 	size_t lh = 0, rh = 0;
@@ -180,17 +194,23 @@ BfsItems* bfs_items_init(size_t depth) {
 }
 
 void bfs(KeyValueNode* node, BfsItems** depthmap, size_t depth) {
-	if (depthmap[depth] == NULL)
-		depthmap[depth] = bfs_items_init(depth);
-	depthmap[depth]->keys[depthmap[depth]->count++] = node->key;
-	if (node->l != NULL)
-		bfs(node->l, depthmap, depth + 1);
-	if (node->r != NULL)
-		bfs(node->r, depthmap, depth + 1);
+	if (depthmap[depth] == NULL) {
+        depthmap[depth] = bfs_items_init(depth);
+    }
+
+    depthmap[depth]->keys[depthmap[depth]->count++] = node->key;
+
+    if (node->l != NULL) {
+        bfs(node->l, depthmap, depth + 1);
+    }
+
+    if (node->r != NULL) {
+        bfs(node->r, depthmap, depth + 1);
+    }
 }
 
 void walk_keys(TreeMap* tree, KeyValueNode* node, TreeWalkOrder order, void** keys, size_t* count) {
-	size_t bfsdepth = 1;
+	size_t bfsdepth;
 	size_t bfscount = 0;
 	BfsItems** depthmap;
 
@@ -211,15 +231,14 @@ void walk_keys(TreeMap* tree, KeyValueNode* node, TreeWalkOrder order, void** ke
 			keys[(*count)++] = node->key;
 			break;
 		case BreadthFirst:
-			while ((1 << bfsdepth) <= tree->size) bfsdepth += 1;
-
+            bfsdepth = get_tree_depth(node, 1);
 			depthmap = malloc(sizeof(BfsItems*) * bfsdepth);
 			for (int d = 0; d < bfsdepth; d++) depthmap[d] = NULL;
 			bfs(tree->root, depthmap, 0);
 
 			for (int d = 0; d < bfsdepth; d++) {
 				for (int k = 0; k < depthmap[d]->count; k++) {
-					keys[bfscount++] = depthmap[d]->keys[k];
+                    keys[bfscount++] = depthmap[d]->keys[k];
 				}
 			}
 

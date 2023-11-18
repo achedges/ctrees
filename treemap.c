@@ -3,7 +3,6 @@
 //
 
 #include <stdlib.h>
-#include <string.h>
 #include "trees.h"
 
 extern KeyValueNode* insert_node(TreeMap* tree, KeyValueNode* root, KeyValueNode* node);
